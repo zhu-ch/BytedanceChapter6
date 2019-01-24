@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true">
+        <Button
+            android:text="播放"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="start"/>
+        <Button
+            android:text="暂停"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="pause"/>
+        <Button
+            android:text="停止"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="stop"/>
+        <Button
+            android:text="重播"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="restart"/>
+
+    </LinearLayout>
+
+    <SurfaceView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sv"
+        android:layout_alignTop="@id/controller"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignTop="@id/sv">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_name"
+            tools:text="test content"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_id"
+            tools:text="test content"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="test content"
+            />
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
