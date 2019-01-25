@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.text.method.ScrollingMovementMethod;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -14,11 +15,10 @@ import android.widget.Toast;
 
 import myself.zch.videoplayer.R;
 
-public class DetailedActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener{
+public class DetailedActivity extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
     private boolean isPlayingVideo = false;
-    private TextView user_name;
-    private TextView user_id;
+    private TextView textView;
     private TextView currentTime;
     private TextView totalTime;
     private SurfaceHolder holder;
@@ -38,27 +38,29 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed);
-        user_name = findViewById(R.id.tv_name);
-        user_id   = findViewById(R.id.tv_id);
+        textView = findViewById(R.id.tv);
 
         SurfaceView surfaceView = findViewById(R.id.sv);
         holder = surfaceView.getHolder();
         intent = getIntent();
 
-        user_id.setText(intent.getStringExtra("USER_ID"));
-        user_name.setText(intent.getStringExtra("USER_NAME"));
+        String str = intent.getStringExtra("USER_ID") + "\n"
+                + intent.getStringExtra("USER_NAME") + "\n";
+        String text = new String(new char[20]).replace("\0", str);
+        textView.setText(text);
+
+        textView.setMovementMethod(ScrollingMovementMethod.getInstance());
     }
 
-    public void start(View view){
-        if(mediaPlayer != null){
-            if(state != PAUSING){
+    public void start(View view) {
+        if (mediaPlayer != null) {
+            if (state != PAUSING) {
                 mediaPlayer.start();
                 state = PLAYING;
 
                 isPlayingVideo = false;
                 return;
-            }
-            else if(state == STOPING){
+            } else if (state == STOPING) {
                 mediaPlayer.reset();
                 mediaPlayer.release();
             }
@@ -67,16 +69,15 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
         play();
     }
 
-    public void  stop(View v){
-        if(mediaPlayer != null){
+    public void stop(View v) {
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             state = STOPING;
         }
     }
 
-    public  void play(){
+    public void play() {
         String url = intent.getStringExtra("VIDEO_URL");
-        //<TODO>二次建对象mediaPlayer是什么操作...
         mediaPlayer = new MediaPlayer();
         try {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -95,7 +96,7 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
             int m = duration / 1000 / 60;
             int s = duration / 1000 % 60;
 
-            totalTime.setText("/"+m+":"+s);
+            totalTime.setText("/" + m + ":" + s);
             currentTime.setText("00:00");
 
             isPlayingVideo = false;
@@ -107,8 +108,8 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
 
     }
 
-    public void pause(View view){
-        if(mediaPlayer != null && state == PLAYING){
+    public void pause(View view) {
+        if (mediaPlayer != null && state == PLAYING) {
             mediaPlayer.pause();
             state = PAUSING;
 
@@ -116,23 +117,24 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
         }
     }
 
-    public void restart(View view){
-        if(mediaPlayer != null){
+    public void restart(View view) {
+        if (mediaPlayer != null) {
             mediaPlayer.reset();
             mediaPlayer.release();
             play();
         }
     }
+
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        Toast.makeText(this,"Finished,play again",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Finished,play again", Toast.LENGTH_SHORT).show();
         mediaPlayer.start();
     }
 
     private class UpdateProgressRunnable implements Runnable {
         @Override
         public void run() {
-            while (!isPlayingVideo){
+            while (!isPlayingVideo) {
                 int currentPosition = mediaPlayer.getCurrentPosition();
                 final int m = currentPosition / 1000 / 60;
                 final int s = currentPosition / 1000 % 60;
@@ -140,7 +142,7 @@ public class DetailedActivity extends AppCompatActivity implements MediaPlayer.O
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        currentTime.setText(m+":"+s);
+                        currentTime.setText(m + ":" + s);
                     }
                 });
                 SystemClock.sleep(1000);
